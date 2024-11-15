@@ -1,8 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="
-            http://maven.apache.org/POM/4.0.0
-            http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.easyride</groupId>
@@ -13,33 +12,46 @@
     <name>EasyRide Notification Service</name>
     <description>Microservice for sending iOS push notifications</description>
 
+
     <properties>
         <java.version>17</java.version>
-        <spring.boot.version>2.7.5</spring.boot.version>
-        <pushy.version>0.14.2</pushy.version>
-        <jackson.version>2.15.2</jackson.version> <!-- 添加Jackson版本 -->
+        <spring.boot.version>2.7.9</spring.boot.version>
+        <pushy.version>0.15.2</pushy.version> <!-- 最新版本 -->
+        <jackson.version>2.15.2</jackson.version>
     </properties>
 
-    <dependencies>
-        <!-- Spring Boot Starter -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-            <version>${spring.boot.version}</version>
-        </dependency>
+    <repositories>
+        <repository>
+            <id>twilio-repo</id>
+            <url>https://twilio.bintray.com/maven</url>
+        </repository>
+    </repositories>
 
-        <!-- Spring Web for RESTful APIs -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- Spring Boot BOM for dependency version management -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- Spring Boot Starter Web for RESTful APIs -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>${spring.boot.version}</version>
         </dependency>
 
-        <!-- Pushy Library for APNs -->
+        <!-- Pushy for APNs (Apple Push Notification) -->
         <dependency>
             <groupId>com.eatthepath</groupId>
             <artifactId>pushy</artifactId>
-            <version>0.15.2</version>
+            <version>${pushy.version}</version>
         </dependency>
 
         <!-- Lombok for reducing boilerplate code -->
@@ -50,18 +62,31 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- For JSON processing -->
+        <!-- Jackson for JSON processing -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
         </dependency>
 
-        <!-- Test dependencies -->
+        <!-- AWS for SMS Sending -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-sns</artifactId>
+            <version>1.12.200</version>
+        </dependency>
+
+        <!-- JavaMail for Email Sending -->
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+
+        <!-- Spring Boot Starter Test for Unit Testing -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <version>${spring.boot.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -76,13 +101,10 @@
                 <configuration>
                     <source>17</source>
                     <target>17</target>
-                    <compilerArgs>
-                        <arg>--enable-preview</arg>
-                    </compilerArgs>
                 </configuration>
             </plugin>
 
-            <!-- Spring Boot Maven Plugin -->
+            <!-- Spring Boot Maven Plugin to build executable JARs -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
