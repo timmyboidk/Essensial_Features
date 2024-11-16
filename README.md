@@ -185,3 +185,56 @@
 -   **订单状态管理**：使用 `OrderStatus` 枚举和相应的方法，管理订单的状态更新（接受、取消等）。
 -   **身份验证和授权**：通过 JWT 认证和授权，保护订单相关的接口，确保只有经过认证的用户才能访问。
 -   **全局异常处理**：通过 `GlobalExceptionHandler` 提供统一的错误处理。
+
+
+**示例请求和响应**
+-----------
+
+### **1\. 创建订单**
+
+-   **请求**：`POST /orders/create`
+-   **请求体**：
+
+
+`{
+  "passengerId": 1,
+  "startLocation": {
+    "latitude": 30.0,
+    "longitude": 120.0
+  },
+  "endLocation": {
+    "latitude": 31.0,
+    "longitude": 121.0
+  },
+  "vehicleType": "STANDARD",
+  "serviceType": "NORMAL",
+  "paymentMethod": "CREDIT_CARD"
+}`
+
+-   **响应**：
+
+`{
+  "orderId": 100,
+  "status": "PENDING",
+  "passengerName": "Test Passenger",
+  "driverName": "Test Driver",
+  "estimatedCost": 100.0,
+  "estimatedDistance": 200.0,
+  "estimatedDuration": 60.0
+}`
+
+### **2\. 获取订单详情**
+
+-   **请求**：`GET /orders/100`
+-   **响应**：
+
+
+`{
+  "orderId": 100,
+  "status": "PENDING",
+  "passengerName": "Test Passenger",
+  "driverName": "Test Driver",
+  "estimatedCost": 100.0,
+  "estimatedDistance": 200.0,
+  "estimatedDuration": 60.0
+}`
