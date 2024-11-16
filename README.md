@@ -140,3 +140,80 @@
 -   **JWT 认证和授权**：通过 `JwtTokenProvider`、`JwtAuthenticationFilter`、`SecurityConfig` 等类实现。
 -   **角色权限控制**：在 `UserDetailsImpl` 中设置用户的角色权限，用于 Spring Security 进行访问控制。
 -   **全局异常处理**：通过 `GlobalExceptionHandler` 实现统一的异常处理机制。
+
+  **Example Requests and Responses for `user_service`**
+-----------------------------------------------------
+
+### **2.1 User Registration**
+
+-   **URL**: `POST /users/register`
+-   **Request Body**:
+
+
+`{
+  "username": "johndoe",
+  "password": "password123",
+  "email": "john.doe@example.com",
+  "role": "PASSENGER"
+}`
+
+-   **Response**:
+
+
+`{
+  "message": "Registration successful"
+}`
+
+### **2.2 User Login**
+
+-   **URL**: `POST /users/login`
+-   **Request Body**:
+
+
+
+`{
+  "username": "johndoe",
+  "password": "password123"
+}`
+
+-   **Response**:
+
+
+
+`{
+  "accessToken": "jwt_token_here",
+  "tokenType": "Bearer"
+}`
+
+### **2.3 Get User Details**
+
+Assuming you have an endpoint to get user details (this may need to be added if not present).
+
+-   **URL**: `GET /users/{id}`
+-   **Request Headers**:
+
+
+`Authorization: Bearer your_jwt_token`
+
+-   **Response**:
+
+
+`{
+  "id": 1,
+  "username": "johndoe",
+  "email": "john.doe@example.com",
+  "role": "PASSENGER"
+}`
+
+### **2.4 Error Response Example**
+
+If there's an error, such as trying to register with an existing username:
+
+-   **Response**:
+
+
+`{
+  "status": 400,
+  "message": "Username already exists",
+  "timestamp": "2023-11-16T12:34:56.789"
+}`
